@@ -1,0 +1,16 @@
+{
+  "name": "Tidy Icons / Fix",
+  "id": "1141636185876791918",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": [
+    "figma"
+  ],
+  "parameters": [
+    {
+      "name": "Size",
+      "key": "size",
+      "allowFreeform": true
+    }
+  ]
+}
