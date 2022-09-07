@@ -1,0 +1,73 @@
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/thomas-lowry/figma-plugin-ds/dist/figma-plugin-ds.css"
+/>
+
+<style>
+  .input-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+  }
+  .label {
+    font-size: 13px;
+    color: steelblue;
+  }
+  .input__field {
+    border-color: lightsteelblue;
+  }
+  .textarea {
+    border-color: lightsteelblue;
+  }
+  .button {
+    margin-top: 12px;
+    font-size: 13px;
+    background-color: steelblue;
+    display: flex;
+    justify-content: center;
+    height: 48px;
+  }
+</style>
+
+<div class="input-form">
+  <div>
+    <div class="label">Element</div>
+    <div class="input">
+      <input type="input" class="input__field" placeholder="" id="title" />
+    </div>
+  </div>
+  <div>
+    <div class="label">Sub-Element / Type / State</div>
+    <div class="input">
+      <input type="input" class="input__field" placeholder="" id="subtitle" />
+    </div>
+  </div>
+
+  <div>
+    <div class="label">Description</div>
+    <textarea class="textarea" rows="8" id="description"></textarea>
+  </div>
+  <button type="submit" class="button button--primary" id="add">Add</button>
+</form>
+
+<script>
+  document.getElementById("add").onclick = () => {
+    const title = document.getElementById("title").value;
+    const subtitle = document.getElementById("subtitle").value;
+    const description = document.getElementById("description").value;
+
+    parent.postMessage(
+      {
+        pluginMessage: {
+          type: "add-block",
+          title,
+          subtitle,
+          description,
+        },
+      },
+      "*"
+    );
+  };
+
+</script>
