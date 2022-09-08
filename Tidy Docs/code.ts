@@ -17,8 +17,29 @@ const loadFonts = async () => {
   await figma.loadFontAsync({ family: "Inter", style: "Bold" });
 };
 
-figma.ui.onmessage = ({ type, title, subtitle, description }) => {
-  console.log("title, subtitle :>> ", title, subtitle);
+function nameCleaner(name) {
+  return name.replace(/[\W_]+/g, " ").trim();
+}
+
+const pageName = nameCleaner(figma.currentPage.name);
+
+function getWorkingFrame(type) {
+  const docFrame = figma.currentPage.findOne(
+    (node) => node.name === "Documentation"
+  );
+  const compFrame = figma.currentPage.findOne((node) => node.name === pageName);
+
+  if (type === "Components") {
+    return compFrame;
+  }
+
+  if (type === "Documentation") {
+    return docFrame;
+  }
+}
+
+figma.ui.onmessage = ({ type, title, subtitle, description, frameType }) => {
+  console.log("frame type :>> ", frameType);
   if (!title) {
     figma.notify("Please, write something in 'Element' field");
   } else {
@@ -27,16 +48,14 @@ figma.ui.onmessage = ({ type, title, subtitle, description }) => {
       //! 0. find on the page frame with name 'Documentation'
       //!
 
-      const docFrame = figma.currentPage.findOne(
-        (node) => node.name === "Documentation"
-      );
+      const workingFrame = getWorkingFrame(frameType);
       //!
       //! 1. create frame with autolayout inside of 'Documentation' that
       //!
 
-      buildDocumentContentFrame(docFrame);
+      buildDocumentContentFrame(workingFrame);
 
-      const documentContentFrame = docFrame.children.find(
+      const documentContentFrame = workingFrame.children.find(
         (node) => node.name === "documentContentFrame"
       );
 
@@ -70,6 +89,7 @@ figma.ui.onmessage = ({ type, title, subtitle, description }) => {
           //! 6. try to append selection to content frame
           if (figma.currentPage.selection.length > 0) {
             figma.currentPage.selection.forEach((node) => {
+              node.layoutAlign = "INHERIT";
               contentFrame?.appendChild(node);
             });
           }

@@ -18,6 +18,7 @@ function buildContentFrame(parent) {
     contentFrame.layoutMode = "VERTICAL";
     contentFrame.layoutGrow = 1;
     contentFrame.paddingLeft = 50;
+    contentFrame.itemSpacing = 100;
     return contentFrame;
   }
 }
