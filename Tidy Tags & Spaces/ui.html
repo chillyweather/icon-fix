@@ -1,0 +1,143 @@
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/thomas-lowry/figma-plugin-ds/dist/figma-plugin-ds.css"
+/>
+
+<style>
+  body {
+    padding: 2em;
+    display: flex;
+    flex-direction: column;
+    /* align-items: stretch; */
+    gap: 36px;
+  }
+
+  .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: stretch;
+    flex-grow: 1;
+  }
+
+  .input__field {
+    font-size: 14px;
+    width: 56px;
+    border: 1px solid lightblue;
+  }
+
+  .tags-start {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  #spacings {
+    background-color: #e0851d;
+  }
+
+  .radio {
+    display: flex;
+  }
+
+  h5 {
+    padding: 0;
+    margin: 0;
+    margin-right: 20px;
+  }
+
+  .spacing-block {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .tags-block {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+</style>
+
+<div class="tags-block">
+  <div class="radio">
+    <h5>Tag position:</h5>
+    <input
+      id="radioButton1"
+      type="radio"
+      class="radio__button"
+      value="top"
+      name="radioGroup"
+      checked
+    />
+    <label for="radioButton1" class="radio__label">Top</label>
+
+    <input
+      id="radioButton2"
+      type="radio"
+      class="radio__button"
+      value="right"
+      name="radioGroup"
+    />
+    <label for="radioButton2" class="radio__label">Right</label>
+  </div>
+
+  <div class="tags-start">
+    <input
+      type="input"
+      class="input__field"
+      value="A"
+      id="start"
+      maxlength="1"
+      pattern="[a-zA-Z0-9]+"
+    />
+    <button id="tags" type="submit" class="button button--primary">
+      Build Tags
+    </button>
+  </div>
+</div>
+
+<div class="spacing-block">
+  <h5>Spacing marks:</h5>
+  <div class="checkbox">
+    <!-- <input id="all" type="checkbox" class="checkbox__box" checked />
+    <label for="all" class="checkbox__label">All</label> -->
+
+    <input id="size" type="checkbox" class="checkbox__box" checked />
+    <label for="size" class="checkbox__label">Size</label>
+
+    <input id="paddings" type="checkbox" class="checkbox__box" checked />
+    <label for="paddings" class="checkbox__label">Paddings</label>
+
+    <input id="itemspacings" type="checkbox" class="checkbox__box" checked />
+    <label for="itemspacings" class="checkbox__label">Spacings</label>
+  </div>
+  <button id="spacings" type="submit" class="button button--primary">
+    Build Spacing Marks
+  </button>
+</div>
+
+<script>
+  document.getElementById("spacings").onclick = () => {
+    const checked = document.querySelectorAll('input[type="checkbox"]:checked');
+    const selectedCheckboxes = [...checked].map((c) => c.id);
+    parent.postMessage(
+      { pluginMessage: { type: "create-spacings", selectedCheckboxes } },
+      "*"
+    );
+  };
+  document.getElementById("tags").onclick = () => {
+    const tags = document.getElementsByName("radioGroup");
+    const start = document.getElementById("start").value;
+
+    for (const tag of tags) {
+      if (tag.checked) {
+        const tagDirection = tag.value;
+        parent.postMessage(
+          { pluginMessage: { type: "create-tags", start, tagDirection } },
+          "*"
+        );
+      }
+    }
+  };
+</script>
